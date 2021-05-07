@@ -1,0 +1,43 @@
+
+avocado = pd.DataFrame(pd.read_csv('/content/drive/MyDrive/Datasets/avocado.csv'), columns=["Date","AveragePrice","Total Volume"])
+
+#convert date to timestamp
+avocado.Date = pd.to_datetime(avocado.Date)
+
+
+#sorting by date
+avocado = avocado.sort_values(by=["Date"])
+
+
+avocado["TotalRevenue"] = avocado["AveragePrice"] * avocado["Total Volume"]
+
+avocado1 = avocado.groupby('Date').sum()
+avocado1["AveragePrice"] = avocado1["TotalRevenue"]/avocado1["Total Volume"]
+avocado1["Date"] = avocado1.index
+
+
+plt.suptitle("Avocado Prices and Volume Time Series")
+
+
+plt.subplot(2,2,1)
+plt.scatter(avocado["Date"],avocado["AveragePrice"])
+plt.ylabel("Average Price")
+
+
+
+plt.subplot(2,2,2)
+plt.scatter(avocado["Date"],avocado["Total Volume"])
+plt.ylabel("Total Volume")
+
+
+plt.subplot(2,2,3)
+plt.plot(avocado1["Date"],avocado1["AveragePrice"])
+plt.ylabel("Average Price")
+
+
+plt.subplot(2,2,4)
+plt.plot(avocado1["Date"],avocado1["Total Volume"])
+plt.ylabel("Total Volume")
+
+
+plt.show()
